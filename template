@@ -4,7 +4,6 @@ version=1.15.0
 revision=1
 archs="x86_64"
 create_wrksrc=yes
-# build_style=meta  <-- Delete or comment out this line!
 short_desc="Powerful knowledge base that works on top of a local folder of plain text files"
 maintainer="MD <programforcoffee89@gmail.com>"
 license="Proprietary"
@@ -13,12 +12,24 @@ distfiles="https://github.com/obsidianmd/obsidian-releases/releases/download/v${
 checksum="75594ae09914ca0191dde13c0697dee653322287a3a806c15519332d9ada14d3"
 
 do_install() {
-    mkdir -p "${DESTDIR}/usr/lib/obsidian"
-    mkdir -p "${DESTDIR}/usr/bin"
-    
-    vcopy * usr/lib/obsidian/
-    
+    # Create destination directory for application files
+    vmkdir usr/lib/obsidian
+
+    # Copy all extracted tarball contents into usr/lib/obsidian
+    vcopy "*" usr/lib/obsidian/
+
+    # Set required permissions for the Electron sandbox binary
+    if [ -f "${DESTDIR}/usr/lib/obsidian/chrome-sandbox" ]; then
+        chmod 4755 "${DESTDIR}/usr/lib/obsidian/chrome-sandbox"
+    fi
+
+    # Remove any pre-existing conflicting bin link from upstream tarball if present
+    rm -f "${DESTDIR}/usr/bin/obsidian"
+
+    # Create usr/bin directory and the terminal symlink safely
+    vmkdir usr/bin
     ln -s /usr/lib/obsidian/obsidian "${DESTDIR}/usr/bin/obsidian"
-    
+
+    # Install the desktop entry into the system applications directory
     vinstall "${FILESDIR}/obsidian.desktop" 644 usr/share/applications
 }
