@@ -1,25 +1,24 @@
-# template for obsidian
+# Template file for 'obsidian'
 pkgname=obsidian
 version=1.15.0
 revision=1
 archs="x86_64"
 create_wrksrc=yes
-build_style=meta
-depends="electron"
-short_desc=""Powerful knowledge base that works on top of a local folder of plain text files"
+# build_style=meta  <-- Delete or comment out this line!
+short_desc="Powerful knowledge base that works on top of a local folder of plain text files"
 maintainer="MD <programforcoffee89@gmail.com>"
 license="Proprietary"
 homepage="https://obsidian.md"
 distfiles="https://github.com/obsidianmd/obsidian-releases/releases/download/v${version}/obsidian-${version}.tar.gz"
-checksum = "sha256:75594ae09914ca0191dde13c0697dee653322287a3a806c15519332d9ada14d3"
+checksum="75594ae09914ca0191dde13c0697dee653322287a3a806c15519332d9ada14d3"
 
 do_install() {
-  vdir /usr/lib/obsidian
-  vdir usr/bin
-  
-  vcopy * /usr/lib/obsidian
-  
-  ln -s /usr/lib/obsidian/obsidian ${DESTDIR}/usr/bin/obsidian
-  
-  vinstall ${FILESDIR}/obsidian.desktop 644 /usr/share/applications
+    mkdir -p "${DESTDIR}/usr/lib/obsidian"
+    mkdir -p "${DESTDIR}/usr/bin"
+    
+    vcopy * usr/lib/obsidian/
+    
+    ln -s /usr/lib/obsidian/obsidian "${DESTDIR}/usr/bin/obsidian"
+    
+    vinstall "${FILESDIR}/obsidian.desktop" 644 usr/share/applications
 }
