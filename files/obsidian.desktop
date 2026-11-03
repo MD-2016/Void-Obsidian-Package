@@ -1,1 +1,9 @@
-https://github.com/MD-2016/Void-Obsidian-Package/blob/main/template
+[Desktop Entry]
+Name=Obsidian
+Comment=Knowledge base note taker
+Exec=obsidian %u
+Terminal=false
+Type=Application
+Icon=obsidian
+StartupWMClass=obsidian
+Categories=Office
