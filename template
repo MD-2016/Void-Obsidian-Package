@@ -12,24 +12,21 @@ distfiles="https://github.com/obsidianmd/obsidian-releases/releases/download/v${
 checksum="75594ae09914ca0191dde13c0697dee653322287a3a806c15519332d9ada14d3"
 
 do_install() {
-    # Create destination directory for application files
+    # 1. Create the correct installation directory in /usr/lib
     vmkdir usr/lib/obsidian
 
-    # Copy all extracted tarball contents into usr/lib/obsidian
+    # 2. Copy the unpacked contents into /usr/lib/obsidian/
     vcopy "*" usr/lib/obsidian/
 
-    # Set required permissions for the Electron sandbox binary
+    # 3. Set required setuid permissions for the Electron sandbox binary
     if [ -f "${DESTDIR}/usr/lib/obsidian/chrome-sandbox" ]; then
         chmod 4755 "${DESTDIR}/usr/lib/obsidian/chrome-sandbox"
     fi
 
-    # Remove any pre-existing conflicting bin link from upstream tarball if present
-    rm -f "${DESTDIR}/usr/bin/obsidian"
-
-    # Create usr/bin directory and the terminal symlink safely
+    # 4. Create /usr/bin and link the binary so it's globally in your PATH
     vmkdir usr/bin
-    ln -s /usr/lib/obsidian/obsidian "${DESTDIR}/usr/bin/obsidian"
+    ln -s ../lib/obsidian/obsidian "${DESTDIR}/usr/bin/obsidian"
 
-    # Install the desktop entry into the system applications directory
+    # 5. Install the desktop icon entry (ensure you have obsidian.desktop in files/)
     vinstall "${FILESDIR}/obsidian.desktop" 644 usr/share/applications
 }
