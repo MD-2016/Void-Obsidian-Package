@@ -6,4 +6,6 @@ Terminal=false
 Type=Application
 Icon=obsidian
 StartupWMClass=obsidian
-Categories=Office
+Categories=Office;WordProcessor;
+MimeType=x-scheme-handler/obsidian;
+NoDisplay=false
